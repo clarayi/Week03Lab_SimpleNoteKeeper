@@ -5,6 +5,13 @@
  */
 package servlet;
 
+import domain.Note;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class NoteServlet extends HttpServlet
 {
-
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -30,21 +36,39 @@ public class NoteServlet extends HttpServlet
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        System.out.println("in processRequest");
+        
         response.setContentType("text/html;charset=UTF-8");
-//        try (PrintWriter out = response.getWriter())
-//        {
-//            /* TODO output your page here. You may use following sample code. */
-//            out.println("<!DOCTYPE html>");
-//            out.println("<html>");
-//            out.println("<head>");
-//            out.println("<title>Servlet NoteServlet</title>");            
-//            out.println("</head>");
-//            out.println("<body>");
-//            out.println("<h1>Servlet NoteServlet at " + request.getContextPath() + "</h1>");
-//            out.println("</body>");
-//            out.println("</html>");
-//        }
-        getServletContext().getRequestDispatcher("/viewnote.jsp").forward(request, response);
+        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
+        
+        Note noteObj = null;
+    
+        try
+        {
+            BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+            String title = br.readLine();
+            System.out.println(title);
+            String content = br.readLine();
+            System.out.println(content);
+
+            noteObj = new Note(title, content);
+            request.setAttribute("note", noteObj);
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("Error! File not found.");
+        }
+        
+        String linkClicked = request.getParameter("link");
+        
+        if(linkClicked == null)
+        {
+            getServletContext().getRequestDispatcher("/viewnote.jsp").forward(request, response);
+        }
+        else
+        {
+            getServletContext().getRequestDispatcher("/editnote.jsp").forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -59,6 +83,7 @@ public class NoteServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        System.out.println("in doGet");
         processRequest(request, response);
     }
 
@@ -73,7 +98,31 @@ public class NoteServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        processRequest(request, response);
+        System.out.println("in doPost");
+        
+        response.setContentType("text/html;charset=UTF-8");
+        String path = getServletContext().getRealPath("/WEB-INF/note.txt");
+        
+        String newTitle = request.getParameter("newTitle");
+        System.out.println(newTitle);
+        String newContent = request.getParameter("newContent");
+        System.out.println(newContent);
+        
+        try
+        {
+            PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(path, false)));
+            pw.println(newTitle);
+            pw.println(newContent);
+            
+            pw.flush();
+            pw.close();
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("Error! File not found. In doPost.");
+        }
+        
+        getServletContext().getRequestDispatcher("/viewnote.jsp").forward(request, response);
     }
 
     /**
