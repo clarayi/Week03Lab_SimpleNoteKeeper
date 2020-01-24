@@ -17,15 +17,12 @@
             <p>
             <h1>Simple Note Keeper</h1>
             <h2>Edit Note</h2>
-            <c:if test = "${note != null}">
-                <h3>Title: <input required type="text" value="${note.title}" name="newTitle"/>
-                <h3>Content: </h3><textarea required rows="4" cols="50" name="newContent">${note.content}</textarea>
-            </c:if>
-            <c:if test= "${note == null}">
-                <h3>Sorry! There was an error!</h3>
+            <c:if test = "${editNote != null}">
+                <h3>Title: <input required type="text" value="${editNote.title}" name="newTitle"/>
+                <h3>Content: </h3><textarea required rows="4" cols="50" name="newContent">${editNote.content}</textarea>
             </c:if>
             </p>
-            <input type="submit" value="Save"/>
+            <input type="submit" value="Save" name="saveButton"/>
         </form>
     </body>
 </html>

@@ -17,15 +17,12 @@
             <p>
             <h1>Simple Note Keeper</h1>
             <h2>View Note</h2>
-            <c:if test = "${note != null}">
-                <h3>Title: ${note.title}</h3>
-                <h3>Content: ${note.content}</h3><br>
-            </c:if>
-            <c:if test= "${note == null}">
-                <h3>Sorry! There was an error!</h3>
+            <c:if test = "${viewNote != null}">
+                <h3>Title: ${viewNote.title}</h3>
+                <h3>Content: ${viewNote.content}</h3><br>
             </c:if>
             </p>
-            <input type="submit" value="Edit" name="link"/>
+            <input type="submit" value="Edit" name="editButton"/>
         </form>
     </body>
 </html>

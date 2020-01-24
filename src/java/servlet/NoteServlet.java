@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class NoteServlet extends HttpServlet
 {
+    Note noteObj = new Note();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,32 +43,36 @@ public class NoteServlet extends HttpServlet
         response.setContentType("text/html;charset=UTF-8");
         String path = getServletContext().getRealPath("/WEB-INF/note.txt");
         
-        Note noteObj = null;
-    
         try
         {
             BufferedReader br = new BufferedReader(new FileReader(new File(path)));
             String title = br.readLine();
-            System.out.println(title);
+            System.out.println("file read: " + title);
             String content = br.readLine();
-            System.out.println(content);
-
-            noteObj = new Note(title, content);
-            request.setAttribute("note", noteObj);
+            System.out.println("file read: " + content);
+            
+            br.close();
+            
+            noteObj.setTitle(title);
+            noteObj.setContent(content);
         }
         catch(FileNotFoundException e)
         {
             System.out.println("Error! File not found.");
         }
         
-        String linkClicked = request.getParameter("link");
+        String editButtonClicked = request.getParameter("editButton");
         
-        if(linkClicked == null)
+        if(editButtonClicked == null)
         {
+            System.out.println("in linkClicked null");
+            request.setAttribute("viewNote", noteObj);
             getServletContext().getRequestDispatcher("/viewnote.jsp").forward(request, response);
         }
         else
         {
+            System.out.println("in linkClicked not null");
+            request.setAttribute("editNote", noteObj);
             getServletContext().getRequestDispatcher("/editnote.jsp").forward(request, response);
         }
     }
@@ -104,9 +110,12 @@ public class NoteServlet extends HttpServlet
         String path = getServletContext().getRealPath("/WEB-INF/note.txt");
         
         String newTitle = request.getParameter("newTitle");
-        System.out.println(newTitle);
+        System.out.println("file write: " + newTitle);
         String newContent = request.getParameter("newContent");
-        System.out.println(newContent);
+        System.out.println("file write: " + newContent);
+        
+        noteObj.setTitle(newTitle);
+        noteObj.setContent(newContent);
         
         try
         {
@@ -114,7 +123,6 @@ public class NoteServlet extends HttpServlet
             pw.println(newTitle);
             pw.println(newContent);
             
-            pw.flush();
             pw.close();
         }
         catch(FileNotFoundException e)
@@ -122,6 +130,7 @@ public class NoteServlet extends HttpServlet
             System.out.println("Error! File not found. In doPost.");
         }
         
+        request.setAttribute("viewNote", noteObj);
         getServletContext().getRequestDispatcher("/viewnote.jsp").forward(request, response);
     }
 
