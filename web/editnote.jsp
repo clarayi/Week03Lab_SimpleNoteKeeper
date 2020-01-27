@@ -13,7 +13,7 @@
         <title>Lab3 Edit</title>
     </head>
     <body>
-        <form method="POST">
+        <form method="post" action="/0123_w3_lab3_SimpleNoteKeeper/note">
             <p>
             <h1>Simple Note Keeper</h1>
             <h2>Edit Note</h2>
@@ -22,7 +22,7 @@
                 <h3>Content: </h3><textarea required rows="4" cols="50" name="newContent">${editNote.content}</textarea>
             </c:if>
             </p>
-            <input type="submit" value="Save" name="saveButton"/>
+            <input type="submit" value="Save"/>
         </form>
     </body>
 </html>

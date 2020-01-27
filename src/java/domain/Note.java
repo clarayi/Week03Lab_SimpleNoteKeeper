@@ -1,10 +1,12 @@
 package domain;
 
+import java.io.Serializable;
+
 /**
  * This is Note class.
  * @author 810783
  */
-public class Note
+public class Note implements Serializable
 {
     private String title;
     private String content;

@@ -13,16 +13,14 @@
         <title>Lab3 View</title>
     </head>
     <body>
-        <form method="get">
-            <p>
+        <p>
             <h1>Simple Note Keeper</h1>
             <h2>View Note</h2>
             <c:if test = "${viewNote != null}">
                 <h3>Title: ${viewNote.title}</h3>
                 <h3>Content: ${viewNote.content}</h3><br>
             </c:if>
-            </p>
-            <input type="submit" value="Edit" name="editButton"/>
-        </form>
+            <a href="note?edit">Edit</a>
+        </p>
     </body>
 </html>
